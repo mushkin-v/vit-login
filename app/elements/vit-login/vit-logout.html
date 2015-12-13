@@ -1,0 +1,68 @@
+<!--
+
+"vit-logout" element must be used with "vit-login" element
+Element use firebase for login and logout and don't need any backend.
+
+You need to put this code in your index.html:
+
+<vit-logout text="Log out"
+  user="{{user}}"
+  location="[[firebaseURL]]">
+</vit-logout>
+
+You need to:
+bower install --save GoogleWebComponents/firebase-element
+
+You can use this code in your app.js for firebaseURL variable
+or you can change my LOCATION default value below:
+
+var app = document.querySelector('#app');
+app.firebaseURL = 'https://<<your_project>>.firebaseio.com';
+
+-->
+
+<link rel="import"; href="../../bower_components/firebase-element/firebase-auth.html">
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+
+<dom-module id="vit-logout">
+
+    <template>
+        <style>
+        </style>
+        <firebase-auth id="authenticate"
+            user="{{user}}"
+            location="{{location}}"
+            ref="{{refauth}}"
+            provider="google">
+        </firebase-auth>
+
+        <paper-button raised on-tap="signOut"> {{ text }} </paper-button>
+
+    </template>
+    <script>
+        Polymer({
+
+          is: 'vit-logout',
+
+          properties: {
+
+            text: {
+              type: String,
+              value: 'Logout'
+            },
+            user: {
+              notify: true
+            },
+            location: {
+              value: 'https://vit-login.firebaseio.com'
+            }
+          },
+
+          signOut: function() {
+            this.$.authenticate.logout();
+            this.user = null;
+            // console.log('Logout');
+          }
+        });
+    </script>
+</dom-module>
